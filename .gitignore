@@ -1,0 +1,14 @@
+.DS_Store
+node_modules/
+dist/
+
+# Private Google Takeout-derived source data.
+organized_restaurants/
+
+# Local generated dataset and copied media assets.
+public/generated/
+public/review-assets/
+src/data/reviews.json
+
+# Cursor workspace metadata.
+.cursor/
