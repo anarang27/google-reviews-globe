@@ -207,6 +207,78 @@ button {
   letter-spacing: -0.04em;
 }
 
+.showcase-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1.1fr 0.8fr;
+  gap: 14px;
+}
+
+.showcase-card {
+  min-height: 260px;
+  padding: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  background: rgba(0, 0, 0, 0.78);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.26);
+  backdrop-filter: blur(18px);
+}
+
+.showcase-card h3 {
+  margin: 0 0 14px;
+  font-size: clamp(1.5rem, 2vw, 2.2rem);
+  letter-spacing: -0.05em;
+}
+
+.showcase-card p:not(.eyebrow) {
+  max-width: 32rem;
+  color: #95a3bd;
+  line-height: 1.7;
+}
+
+.podium-preview {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: end;
+  gap: 10px;
+  height: 120px;
+  margin: 18px 0;
+}
+
+.podium-preview span {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  border: 1px solid rgba(141, 215, 255, 0.22);
+  border-radius: 18px 18px 8px 8px;
+  padding-top: 14px;
+  color: #dff6ff;
+  background: linear-gradient(180deg, rgba(141, 215, 255, 0.18), rgba(141, 215, 255, 0.04));
+  font-weight: 900;
+}
+
+.podium-preview span:nth-child(1) {
+  height: 76px;
+}
+
+.podium-preview span:nth-child(2) {
+  height: 112px;
+}
+
+.podium-preview span:nth-child(3) {
+  height: 58px;
+}
+
+.photo-preview {
+  height: 136px;
+  margin: 18px 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 32% 32%, rgba(255, 255, 255, 0.3), transparent 4rem),
+    linear-gradient(135deg, rgba(60, 130, 255, 0.22), rgba(99, 230, 190, 0.1)),
+    rgba(255, 255, 255, 0.04);
+}
+
 .detail-heading {
   display: flex;
   align-items: flex-start;
@@ -382,6 +454,38 @@ button {
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
   backdrop-filter: blur(18px);
   overflow: hidden;
+}
+
+.controls-panel {
+  position: fixed;
+  z-index: 4;
+  left: 24px;
+  top: 188px;
+  width: min(290px, calc(100vw - 48px));
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  background: rgba(0, 0, 0, 0.58);
+  backdrop-filter: blur(18px);
+}
+
+.controls-panel ul {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding-left: 18px;
+  color: #c8d6f0;
+}
+
+.controls-panel span {
+  display: inline-flex;
+  border: 1px solid rgba(141, 215, 255, 0.18);
+  border-radius: 999px;
+  padding: 7px 10px;
+  color: #8dd7ff;
+  background: rgba(141, 215, 255, 0.08);
+  font-size: 0.76rem;
+  font-weight: 900;
 }
 
 .hud-panel h3 {
@@ -684,6 +788,10 @@ button {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
+  .showcase-grid {
+    grid-template-columns: 1fr;
+  }
+
   .globe-panel {
     min-height: 620px;
   }
@@ -714,6 +822,10 @@ button {
   .country-list,
   .review-list {
     max-height: 20vh;
+  }
+
+  .controls-panel {
+    display: none;
   }
 }
 

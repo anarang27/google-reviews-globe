@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Globe, Marker, Root, type RootRef } from "react-three-globe";
+import { Marker, Root, type RootRef } from "react-three-globe";
+import { WireframeEarth } from "./components/WireframeEarth";
 import { sampleReviews } from "./data/sampleReviews";
 import type { CountrySummary, RestaurantReview, ReviewsDataset } from "./types";
 
@@ -161,6 +162,35 @@ function IntroTab({ dataset, onExplore }: IntroTabProps) {
         <MetricCard label="Total Contribution Views" value="4.9M" />
         <MetricCard label="All-time Photo Views" value="4.5M" />
       </div>
+
+      <section className="showcase-grid" aria-label="Future review highlights">
+        <article className="showcase-card podium-card">
+          <p className="eyebrow">Coming soon</p>
+          <h3>Favorites Podium</h3>
+          <div className="podium-preview" aria-hidden="true">
+            <span>2</span>
+            <span>1</span>
+            <span>3</span>
+          </div>
+          <p>Reserved for the restaurants I would personally put on the all-time podium.</p>
+        </article>
+
+        <article className="showcase-card photo-favorite-card">
+          <p className="eyebrow">Coming soon</p>
+          <h3>Favorite Pic</h3>
+          <div className="photo-preview" aria-hidden="true" />
+          <p>A future spotlight for my favorite Google Maps photo and the story behind it.</p>
+        </article>
+
+        <article className="showcase-card">
+          <p className="eyebrow">Coming soon</p>
+          <h3>Review Milestones</h3>
+          <p>
+            Space for milestones like highest-viewed photo, most memorable meal, and favorite
+            country for food.
+          </p>
+        </article>
+      </section>
     </section>
   );
 }
@@ -226,7 +256,7 @@ function ReviewsTab({
 
         <div className="globe-stage" aria-label="Interactive restaurant review globe">
           <Root globeRef={globeRef} originX={0.48} originY={0.52} azimuthOffset={-0.4}>
-            <Globe texture="/earth-dark.svg" />
+            <WireframeEarth />
 
             {!selectedCountry &&
               dataset.countries.map((country) => (
@@ -291,6 +321,8 @@ function ReviewsTab({
         />
       )}
 
+      <GlobeControlsPanel selectedCountry={selectedCountry} dataMode={dataMode} />
+
       <aside className="legend-panel" aria-label="Cuisine legend">
         <p className="eyebrow">Cuisine legend</p>
         <h3>Flags show cuisine origin</h3>
@@ -308,6 +340,26 @@ function ReviewsTab({
 
       {selectedReview ? <ReviewDetail review={selectedReview} onClose={onCloseReview} /> : null}
     </section>
+  );
+}
+
+function GlobeControlsPanel({
+  selectedCountry,
+  dataMode,
+}: {
+  selectedCountry: CountrySummary | null;
+  dataMode: DataMode;
+}) {
+  return (
+    <aside className="controls-panel" aria-label="Globe controls">
+      <p className="eyebrow">Controls</p>
+      <ul>
+        <li>Drag to rotate</li>
+        <li>Scroll to zoom</li>
+        <li>{selectedCountry ? "Click a restaurant dot for the full review" : "Hover a country hotspot for counts"}</li>
+      </ul>
+      <span>{dataMode === "generated" ? "Using local full dataset" : "Using public sample data"}</span>
+    </aside>
   );
 }
 
