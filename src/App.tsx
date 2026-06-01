@@ -123,6 +123,7 @@ function App() {
           onReviewHover={setHoveredReview}
           onReviewSelect={setSelectedReview}
           onCloseReview={() => setSelectedReview(null)}
+          onOpenWorld={resetGlobe}
         />
       ) : (
         <MotivationTab />
@@ -192,6 +193,7 @@ type ReviewsTabProps = {
   onReviewHover: (review: RestaurantReview | null) => void;
   onReviewSelect: (review: RestaurantReview) => void;
   onCloseReview: () => void;
+  onOpenWorld: () => void;
 };
 
 function ReviewsTab({
@@ -209,6 +211,7 @@ function ReviewsTab({
   onReviewHover,
   onReviewSelect,
   onCloseReview,
+  onOpenWorld,
 }: ReviewsTabProps) {
   return (
     <section className="reviews-layout">
@@ -276,6 +279,18 @@ function ReviewsTab({
         </div>
       </div>
 
+      {!selectedCountry ? (
+        <WorldHud dataset={dataset} onCountrySelect={onCountrySelect} />
+      ) : (
+        <CountryHud
+          country={selectedCountry}
+          reviews={visibleReviews}
+          selectedReview={selectedReview}
+          onReviewSelect={onReviewSelect}
+          onOpenWorld={onOpenWorld}
+        />
+      )}
+
       <aside className="legend-panel" aria-label="Cuisine legend">
         <p className="eyebrow">Cuisine legend</p>
         <h3>Flags show cuisine origin</h3>
@@ -293,6 +308,91 @@ function ReviewsTab({
 
       {selectedReview ? <ReviewDetail review={selectedReview} onClose={onCloseReview} /> : null}
     </section>
+  );
+}
+
+function WorldHud({
+  dataset,
+  onCountrySelect,
+}: {
+  dataset: ReviewsDataset;
+  onCountrySelect: (country: CountrySummary) => void;
+}) {
+  return (
+    <aside className="hud-panel world-hud" aria-label="World overview">
+      <p className="eyebrow">Mission select</p>
+      <h3>Pick a country</h3>
+      <div className="hud-stats">
+        <span>{formatNumber(dataset.metrics.totalRestaurants)} restaurants</span>
+        <span>{formatNumber(dataset.metrics.totalCountries)} countries</span>
+        <span>{formatNumber(dataset.metrics.totalPhotos)} photos</span>
+      </div>
+      <div className="country-list">
+        {dataset.countries.map((country) => (
+          <button key={country.countryCode} onClick={() => onCountrySelect(country)} type="button">
+            <span>{country.countryName}</span>
+            <strong>{country.reviewCount}</strong>
+          </button>
+        ))}
+      </div>
+    </aside>
+  );
+}
+
+function CountryHud({
+  country,
+  reviews,
+  selectedReview,
+  onReviewSelect,
+  onOpenWorld,
+}: {
+  country: CountrySummary;
+  reviews: RestaurantReview[];
+  selectedReview: RestaurantReview | null;
+  onReviewSelect: (review: RestaurantReview) => void;
+  onOpenWorld: () => void;
+}) {
+  return (
+    <aside className="hud-panel country-hud" aria-label={`${country.countryName} reviews`}>
+      <div className="hud-heading">
+        <div>
+          <p className="eyebrow">Country unlocked</p>
+          <h3>{country.countryName}</h3>
+        </div>
+        <button onClick={onOpenWorld} type="button">
+          World
+        </button>
+      </div>
+
+      <div className="hud-stats">
+        <span>{formatNumber(country.reviewCount)} reviews</span>
+        <span>{formatNumber(country.photoCount)} photos</span>
+        <span>{formatNumber(country.totalPhotoViews)} views</span>
+      </div>
+
+      <div className="review-list">
+        {reviews.length ? (
+          reviews.map((review) => (
+            <button
+              className={selectedReview?.id === review.id ? "active" : ""}
+              key={review.id}
+              onClick={() => onReviewSelect(review)}
+              type="button"
+            >
+              <span className="review-list-dot" style={{ background: review.cuisineColor }} />
+              <span>
+                <strong>{review.name}</strong>
+                <em>
+                  {review.cuisine} · {review.rating}/5 · {formatNumber(review.totalPhotoViews)} views
+                </em>
+              </span>
+            </button>
+          ))
+        ) : (
+          <p className="empty-state">No restaurant reviews found for this country yet.</p>
+        )}
+      </div>
+    </aside>
   );
 }
 
@@ -355,15 +455,19 @@ function ReviewDetail({ review, onClose }: { review: RestaurantReview; onClose: 
           <h3>{formatNumber(review.totalPhotoViews)} total views</h3>
         </div>
         <div className="photo-grid">
-          {visiblePhotos.map((photo) => (
-            <article className="photo-card" key={photo.id}>
-              {photo.assetPath && photo.mediaType === "image" ? (
-                <img src={photo.assetPath} alt={photo.description || photo.title} loading="lazy" />
-              ) : (
-                <div className="photo-placeholder">{photo.mediaType === "video" ? "Video" : "Photo"}</div>
-              )}
-            </article>
-          ))}
+          {visiblePhotos.length ? (
+            visiblePhotos.map((photo) => (
+              <article className="photo-card" key={photo.id}>
+                {photo.assetPath && photo.mediaType === "image" ? (
+                  <img src={photo.assetPath} alt={photo.description || photo.title} loading="lazy" />
+                ) : (
+                  <div className="photo-placeholder">{photo.mediaType === "video" ? "Video" : "Photo"}</div>
+                )}
+              </article>
+            ))
+          ) : (
+            <p className="empty-state">No public photo assets are available for this review.</p>
+          )}
         </div>
       </section>
     </aside>
