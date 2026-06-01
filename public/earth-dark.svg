@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2048" height="1024" viewBox="0 0 2048 1024">
+  <defs>
+    <radialGradient id="ocean" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#20345f"/>
+      <stop offset="55%" stop-color="#0d1c37"/>
+      <stop offset="100%" stop-color="#050816"/>
+    </radialGradient>
+    <pattern id="grid" width="128" height="128" patternUnits="userSpaceOnUse">
+      <path d="M 128 0 L 0 0 0 128" fill="none" stroke="#6ad7ff" stroke-width="1" opacity="0.14"/>
+    </pattern>
+  </defs>
+  <rect width="2048" height="1024" fill="url(#ocean)"/>
+  <rect width="2048" height="1024" fill="url(#grid)"/>
+  <path d="M130 310 C270 210 390 260 510 190 C610 135 720 160 820 245 C720 320 620 315 525 395 C420 485 280 460 130 310Z" fill="#213f38" opacity="0.78"/>
+  <path d="M900 250 C1050 160 1210 180 1330 265 C1245 355 1110 395 955 365 C875 350 830 305 900 250Z" fill="#24473d" opacity="0.75"/>
+  <path d="M1180 470 C1325 410 1480 460 1590 560 C1480 675 1320 700 1190 620 C1105 570 1085 515 1180 470Z" fill="#24473d" opacity="0.7"/>
+  <path d="M1560 250 C1685 185 1840 225 1945 325 C1855 410 1700 425 1585 360 C1515 320 1500 285 1560 250Z" fill="#213f38" opacity="0.68"/>
+  <path d="M690 550 C820 485 1000 530 1100 645 C990 760 835 790 700 690 C610 625 600 590 690 550Z" fill="#24473d" opacity="0.72"/>
+  <path d="M300 630 C410 595 520 645 575 735 C500 830 360 855 260 770 C205 725 220 655 300 630Z" fill="#213f38" opacity="0.72"/>
+</svg>
