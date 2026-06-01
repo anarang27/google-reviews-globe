@@ -27,6 +27,7 @@ function App() {
   const [dataset, setDataset] = useState<ReviewsDataset>(sampleReviews);
   const [dataMode, setDataMode] = useState<DataMode>("sample");
   const [selectedCountry, setSelectedCountry] = useState<CountrySummary | null>(null);
+  const [hoveredCountry, setHoveredCountry] = useState<CountrySummary | null>(null);
   const [hoveredReview, setHoveredReview] = useState<RestaurantReview | null>(null);
   const [selectedReview, setSelectedReview] = useState<RestaurantReview | null>(null);
   const globeRef = useRef<RootRef>(null);
@@ -68,15 +69,15 @@ function App() {
 
   function resetGlobe() {
     setSelectedCountry(null);
+    setHoveredCountry(null);
     setSelectedReview(null);
     setHoveredReview(null);
   }
 
   return (
-    <main className="app-shell">
+    <main className={`app-shell ${activeTab === "globe" ? "globe-mode" : ""}`}>
       <header className="site-header">
         <div>
-          <p className="eyebrow">Google Maps Local Guide Archive</p>
           <h1>Google Reviews Globe</h1>
         </div>
         <nav className="tabs" aria-label="Primary navigation">
@@ -112,10 +113,12 @@ function App() {
           dataset={dataset}
           globeRef={globeRef}
           selectedCountry={selectedCountry}
+          hoveredCountry={hoveredCountry}
           visibleReviews={visibleReviews}
           hoveredReview={hoveredReview}
           selectedReview={selectedReview}
           onCountrySelect={focusCountry}
+          onCountryHover={setHoveredCountry}
           onReset={resetGlobe}
           onReviewHover={setHoveredReview}
           onReviewSelect={setSelectedReview}
@@ -153,9 +156,9 @@ function IntroTab({ dataset, onExplore }: IntroTabProps) {
         <MetricCard label="Restaurants" value={formatNumber(dataset.metrics.totalRestaurants)} />
         <MetricCard label="Countries" value={formatNumber(dataset.metrics.totalCountries)} />
         <MetricCard label="Photos" value={formatNumber(dataset.metrics.totalPhotos)} />
-        <MetricCard label="Photo views" value={formatNumber(dataset.metrics.totalPhotoViews)} />
-        <MetricCard label="Average rating" value={`${dataset.metrics.averageRating.toFixed(2)} / 5`} />
-        <MetricCard label="Top country" value={dataset.metrics.topCountry} />
+        <MetricCard label="Local Guide Level" value="6" />
+        <MetricCard label="Total Contribution Views" value="4.9M" />
+        <MetricCard label="All-time Photo Views" value="4.5M" />
       </div>
     </section>
   );
@@ -179,10 +182,12 @@ type ReviewsTabProps = {
   dataset: ReviewsDataset;
   globeRef: React.RefObject<RootRef>;
   selectedCountry: CountrySummary | null;
+  hoveredCountry: CountrySummary | null;
   visibleReviews: RestaurantReview[];
   hoveredReview: RestaurantReview | null;
   selectedReview: RestaurantReview | null;
   onCountrySelect: (country: CountrySummary) => void;
+  onCountryHover: (country: CountrySummary | null) => void;
   onReset: () => void;
   onReviewHover: (review: RestaurantReview | null) => void;
   onReviewSelect: (review: RestaurantReview) => void;
@@ -194,10 +199,12 @@ function ReviewsTab({
   dataset,
   globeRef,
   selectedCountry,
+  hoveredCountry,
   visibleReviews,
   hoveredReview,
   selectedReview,
   onCountrySelect,
+  onCountryHover,
   onReset,
   onReviewHover,
   onReviewSelect,
@@ -221,9 +228,17 @@ function ReviewsTab({
             {!selectedCountry &&
               dataset.countries.map((country) => (
                 <Marker key={country.countryCode} coordinates={country.coordinates}>
-                  <button className="country-marker" onClick={() => onCountrySelect(country)} type="button">
-                    <span>{country.countryFlag}</span>
-                    <strong>{country.reviewCount}</strong>
+                  <button
+                    className={`country-hotspot ${
+                      hoveredCountry?.countryCode === country.countryCode ? "hovered" : ""
+                    }`}
+                    onClick={() => onCountrySelect(country)}
+                    onMouseEnter={() => onCountryHover(country)}
+                    onMouseLeave={() => onCountryHover(null)}
+                    type="button"
+                    aria-label={`${country.countryName}: ${country.reviewCount} reviews`}
+                  >
+                    <span>{country.reviewCount}</span>
                   </button>
                 </Marker>
               ))}
@@ -240,12 +255,13 @@ function ReviewsTab({
                     type="button"
                     aria-label={`Open review for ${review.name}`}
                   >
-                    <span>{review.cuisineFlag}</span>
+                    <span />
                   </button>
                 </Marker>
               ))}
           </Root>
 
+          {hoveredCountry && !selectedCountry ? <CountryHoverCard country={hoveredCountry} /> : null}
           {hoveredReview && !selectedReview ? <HoverCard review={hoveredReview} /> : null}
         </div>
 
@@ -277,6 +293,20 @@ function ReviewsTab({
 
       {selectedReview ? <ReviewDetail review={selectedReview} onClose={onCloseReview} /> : null}
     </section>
+  );
+}
+
+function CountryHoverCard({ country }: { country: CountrySummary }) {
+  return (
+    <article className="hover-card country-card">
+      <div>
+        <h3>{country.countryName}</h3>
+        <p>
+          {formatNumber(country.reviewCount)} {country.reviewCount === 1 ? "review" : "reviews"}
+        </p>
+        <strong>{formatNumber(country.totalPhotoViews)} photo views</strong>
+      </div>
+    </article>
   );
 }
 
@@ -314,7 +344,6 @@ function ReviewDetail({ review, onClose }: { review: RestaurantReview; onClose: 
           </p>
         </div>
       </div>
-      <p className="detail-address">{review.address}</p>
       <p className="review-copy">{review.reviewText}</p>
       <a className="maps-link" href={review.googleMapsUrl} target="_blank" rel="noreferrer">
         Open on Google Maps
@@ -333,10 +362,6 @@ function ReviewDetail({ review, onClose }: { review: RestaurantReview; onClose: 
               ) : (
                 <div className="photo-placeholder">{photo.mediaType === "video" ? "Video" : "Photo"}</div>
               )}
-              <div>
-                <strong>{photo.description || photo.title}</strong>
-                <p>{formatNumber(photo.imageViews)} views</p>
-              </div>
             </article>
           ))}
         </div>
