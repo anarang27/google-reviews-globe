@@ -3,7 +3,7 @@ import { Globe, Marker, Root, type RootRef } from "react-three-globe";
 import { sampleReviews } from "./data/sampleReviews";
 import type { CountrySummary, RestaurantReview, ReviewsDataset } from "./types";
 
-type ActiveTab = "intro" | "reviews";
+type ActiveTab = "intro" | "globe" | "motivation";
 type DataMode = "sample" | "generated";
 
 const numberFormatter = new Intl.NumberFormat("en-US");
@@ -59,13 +59,6 @@ function App() {
     return dataset.reviews.filter((review) => review.countryCode === selectedCountry.countryCode);
   }, [dataset.reviews, selectedCountry]);
 
-  const featuredReview = useMemo(
-    () =>
-      [...dataset.reviews].sort((a, b) => b.totalPhotoViews - a.totalPhotoViews)[0] ??
-      dataset.reviews[0],
-    [dataset.reviews],
-  );
-
   function focusCountry(country: CountrySummary) {
     setSelectedCountry(country);
     setSelectedReview(null);
@@ -95,18 +88,25 @@ function App() {
             Intro
           </button>
           <button
-            className={activeTab === "reviews" ? "active" : ""}
-            onClick={() => setActiveTab("reviews")}
+            className={activeTab === "globe" ? "active" : ""}
+            onClick={() => setActiveTab("globe")}
             type="button"
           >
-            Reviews
+            Globe
+          </button>
+          <button
+            className={activeTab === "motivation" ? "active" : ""}
+            onClick={() => setActiveTab("motivation")}
+            type="button"
+          >
+            Motivation
           </button>
         </nav>
       </header>
 
       {activeTab === "intro" ? (
-        <IntroTab dataset={dataset} featuredReview={featuredReview} onExplore={() => setActiveTab("reviews")} />
-      ) : (
+        <IntroTab dataset={dataset} onExplore={() => setActiveTab("globe")} />
+      ) : activeTab === "globe" ? (
         <ReviewsTab
           dataMode={dataMode}
           dataset={dataset}
@@ -121,6 +121,8 @@ function App() {
           onReviewSelect={setSelectedReview}
           onCloseReview={() => setSelectedReview(null)}
         />
+      ) : (
+        <MotivationTab />
       )}
     </main>
   );
@@ -128,11 +130,10 @@ function App() {
 
 type IntroTabProps = {
   dataset: ReviewsDataset;
-  featuredReview: RestaurantReview;
   onExplore: () => void;
 };
 
-function IntroTab({ dataset, featuredReview, onExplore }: IntroTabProps) {
+function IntroTab({ dataset, onExplore }: IntroTabProps) {
   return (
     <section className="intro-grid">
       <div className="hero-card">
@@ -156,29 +157,6 @@ function IntroTab({ dataset, featuredReview, onExplore }: IntroTabProps) {
         <MetricCard label="Average rating" value={`${dataset.metrics.averageRating.toFixed(2)} / 5`} />
         <MetricCard label="Top country" value={dataset.metrics.topCountry} />
       </div>
-
-      <article className="featured-card">
-        <p className="eyebrow">Featured review</p>
-        <div className="featured-title">
-          <span>{featuredReview.cuisineFlag}</span>
-          <h3>{featuredReview.name}</h3>
-        </div>
-        <p>{featuredReview.reviewText}</p>
-        <dl>
-          <div>
-            <dt>Cuisine</dt>
-            <dd>{featuredReview.cuisine}</dd>
-          </div>
-          <div>
-            <dt>Photo views</dt>
-            <dd>{formatNumber(featuredReview.totalPhotoViews)}</dd>
-          </div>
-          <div>
-            <dt>Rating</dt>
-            <dd>{featuredReview.rating}/5</dd>
-          </div>
-        </dl>
-      </article>
     </section>
   );
 }
@@ -190,6 +168,10 @@ function MetricCard({ label, value }: { label: string; value: string }) {
       <strong>{value}</strong>
     </article>
   );
+}
+
+function MotivationTab() {
+  return <section className="motivation-panel" aria-label="Motivation" />;
 }
 
 type ReviewsTabProps = {
