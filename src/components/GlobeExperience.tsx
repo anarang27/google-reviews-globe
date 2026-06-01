@@ -177,11 +177,6 @@ function WorldHud({
     <aside className="hud-panel world-hud" aria-label="World overview">
       <p className="eyebrow">Mission select</p>
       <h3>Pick a country</h3>
-      <div className="hud-stats">
-        <span>{formatNumber(dataset.metrics.totalRestaurants)} restaurants</span>
-        <span>{formatNumber(dataset.metrics.totalCountries)} countries</span>
-        <span>{formatNumber(dataset.metrics.totalPhotos)} photos</span>
-      </div>
       <div className="country-list">
         {dataset.countries.map((country) => (
           <button key={country.countryCode} onClick={() => onCountrySelect(country)} type="button">
@@ -300,9 +295,6 @@ function ReviewDetail({ review, onClose }: { review: RestaurantReview; onClose: 
         </div>
       </div>
       <p className="review-copy">{review.reviewText}</p>
-      <a className="maps-link" href={review.googleMapsUrl} target="_blank" rel="noreferrer">
-        Open on Google Maps
-      </a>
 
       <section className="photo-section">
         <div>
@@ -318,6 +310,12 @@ function ReviewDetail({ review, onClose }: { review: RestaurantReview; onClose: 
                 ) : (
                   <div className="photo-placeholder">{photo.mediaType === "video" ? "Video" : "Photo"}</div>
                 )}
+                {(photo.description.trim() || photo.imageViews > 0) ? (
+                  <div className="photo-meta">
+                    {photo.description.trim() ? <strong>{photo.description}</strong> : null}
+                    {photo.imageViews > 0 ? <span>{formatNumber(photo.imageViews)} views</span> : null}
+                  </div>
+                ) : null}
               </article>
             ))
           ) : (
@@ -325,6 +323,10 @@ function ReviewDetail({ review, onClose }: { review: RestaurantReview; onClose: 
           )}
         </div>
       </section>
+
+      <a className="maps-link" href={review.googleMapsUrl} target="_blank" rel="noreferrer">
+        Open on Google Maps
+      </a>
     </aside>
   );
 }

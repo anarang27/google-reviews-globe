@@ -437,6 +437,8 @@ button {
   top: auto;
   width: 260px;
   max-height: 32vh;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
@@ -482,6 +484,10 @@ button {
   margin: 0;
   font-size: 1.22rem;
   letter-spacing: -0.08em;
+}
+
+.world-hud h3 {
+  margin-bottom: 12px;
 }
 
 .hud-heading {
@@ -602,8 +608,8 @@ button {
 .legend-list {
   display: grid;
   gap: 10px;
-  max-height: 590px;
-  overflow: auto;
+  min-height: 0;
+  overflow-y: auto;
   padding-right: 6px;
 }
 
@@ -676,9 +682,9 @@ button {
   top: 92px;
   right: 24px;
   max-height: calc(100vh - 116px);
-  width: min(440px, calc(100vw - 48px));
-  padding: 24px;
-  border-radius: 28px;
+  width: min(360px, calc(100vw - 48px));
+  padding: 18px;
+  border-radius: 22px;
   overflow: auto;
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
@@ -707,7 +713,7 @@ button {
 
 .maps-link {
   display: inline-flex;
-  margin: 8px 0 26px;
+  margin: 16px 0 0;
   color: #8dd7ff;
   font-weight: 800;
 }
@@ -734,7 +740,7 @@ button {
 .photo-card img,
 .photo-placeholder {
   width: 100%;
-  height: 260px;
+  height: 220px;
   border-radius: 0;
   object-fit: cover;
 }
@@ -747,14 +753,22 @@ button {
   background: rgba(255, 255, 255, 0.07);
 }
 
-.photo-card strong {
-  display: block;
-  font-size: 0.92rem;
+.photo-meta {
+  display: grid;
+  gap: 5px;
+  padding: 10px 12px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.photo-card p {
-  margin: 5px 0 0;
+.photo-meta strong {
+  color: #e8f2ff;
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.photo-meta span {
   color: #95a3bd;
+  font-size: 0.76rem;
 }
 
 .motivation-panel {
