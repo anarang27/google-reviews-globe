@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { AdditiveBlending, BackSide, BufferGeometry, Float32BufferAttribute } from "three";
 import { mesh } from "topojson-client";
-import countriesTopology from "world-atlas/countries-110m.json";
+import countriesTopology from "world-atlas/countries-50m.json";
 import type { MultiLineString } from "geojson";
 
 const GLOBE_RADIUS = 100;
@@ -26,7 +26,25 @@ function buildLineGeometry(lines: number[][][], radius: number) {
     for (let index = 0; index < line.length - 1; index += 1) {
       const [lngA, latA] = line[index];
       const [lngB, latB] = line[index + 1];
-      positions.push(...toPoint(latA, lngA, radius), ...toPoint(latB, lngB, radius));
+
+      // TopoJSON arcs can wrap around the antimeridian; skipping those long
+      // jumps avoids stray lines cutting across the globe.
+      if (Math.abs(lngA - lngB) > 180) {
+        continue;
+      }
+
+      const steps = Math.max(1, Math.ceil(Math.max(Math.abs(lngA - lngB), Math.abs(latA - latB)) / 2));
+
+      for (let step = 0; step < steps; step += 1) {
+        const startT = step / steps;
+        const endT = (step + 1) / steps;
+        const startLng = lngA + (lngB - lngA) * startT;
+        const startLat = latA + (latB - latA) * startT;
+        const endLng = lngA + (lngB - lngA) * endT;
+        const endLat = latA + (latB - latA) * endT;
+
+        positions.push(...toPoint(startLat, startLng, radius), ...toPoint(endLat, endLng, radius));
+      }
     }
   }
 
@@ -101,7 +119,7 @@ export function WireframeEarth() {
 
       <mesh>
         <sphereGeometry args={[GLOBE_RADIUS, 96, 96]} />
-        <meshBasicMaterial color="#020706" transparent opacity={0.34} />
+        <meshBasicMaterial color="#010302" />
       </mesh>
 
       <mesh>
