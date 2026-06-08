@@ -1,9 +1,11 @@
 import { useMemo, useRef, useState, type CSSProperties } from "react";
-import { Marker, Root, type RootRef } from "react-three-globe";
 import type { CountrySummary, RestaurantReview, ReviewPhoto, ReviewsDataset } from "../types";
+import { Marker, Root, type RootRef } from "./ControlledGlobe";
 import { WireframeEarth } from "./WireframeEarth";
 
 const numberFormatter = new Intl.NumberFormat("en-US");
+const WORLD_ROTATE_SPEED = 0.8;
+const COUNTRY_ROTATE_SPEED = 0.28;
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",
@@ -72,7 +74,13 @@ export default function GlobeExperience({ dataset }: GlobeExperienceProps) {
         </div>
 
         <div className="globe-stage" aria-label="Interactive restaurant review globe">
-          <Root globeRef={globeRef} originX={0.48} originY={0.52} azimuthOffset={-0.4}>
+          <Root
+            globeRef={globeRef}
+            originX={0.48}
+            originY={0.52}
+            azimuthOffset={-0.4}
+            rotateSpeed={selectedCountry ? COUNTRY_ROTATE_SPEED : WORLD_ROTATE_SPEED}
+          >
             <WireframeEarth />
 
             {!selectedCountry &&
