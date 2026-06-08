@@ -134,8 +134,7 @@ button {
 .metric-card,
 .globe-panel,
 .legend-panel,
-.detail-panel,
-.motivation-panel {
+.detail-panel {
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(0, 0, 0, 0.78);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.26);
@@ -918,11 +917,6 @@ button {
 .photo-lightbox figcaption span {
   color: #95a3bd;
   white-space: nowrap;
-}
-
-.motivation-panel {
-  min-height: 520px;
-  border-radius: 34px;
 }
 
 .globe-loading {

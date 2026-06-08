@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useState } from "react";
 import { sampleReviews } from "./data/sampleReviews";
 import type { ReviewsDataset } from "./types";
 
-type ActiveTab = "intro" | "globe" | "motivation";
+type ActiveTab = "intro" | "globe";
 const GlobeExperience = lazy(() => import("./components/GlobeExperience"));
 
 const numberFormatter = new Intl.NumberFormat("en-US");
@@ -53,24 +53,15 @@ function App() {
           >
             Globe
           </button>
-          <button
-            className={activeTab === "motivation" ? "active" : ""}
-            onClick={() => setActiveTab("motivation")}
-            type="button"
-          >
-            Motivation
-          </button>
         </nav>
       </header>
 
       {activeTab === "intro" ? (
         <IntroTab dataset={dataset} onExplore={() => setActiveTab("globe")} />
-      ) : activeTab === "globe" ? (
+      ) : (
         <Suspense fallback={<GlobeLoading />}>
           <GlobeExperience dataset={dataset} />
         </Suspense>
-      ) : (
-        <MotivationTab />
       )}
     </main>
   );
@@ -172,10 +163,6 @@ function MetricCard({ label, value }: { label: string; value: string }) {
       <strong>{value}</strong>
     </article>
   );
-}
-
-function MotivationTab() {
-  return <section className="motivation-panel" aria-label="Motivation" />;
 }
 
 function GlobeLoading() {
