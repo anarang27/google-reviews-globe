@@ -248,14 +248,27 @@ button {
 
 .podium-preview span {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+  gap: 8px;
   border: 1px solid rgba(141, 215, 255, 0.22);
   border-radius: 18px 18px 8px 8px;
-  padding-top: 14px;
+  padding: 12px 10px;
   color: #dff6ff;
   background: linear-gradient(180deg, rgba(141, 215, 255, 0.18), rgba(141, 215, 255, 0.04));
   font-weight: 900;
+}
+
+.podium-preview strong {
+  font-size: 1.35rem;
+}
+
+.podium-preview em {
+  color: #c8d6f0;
+  font-size: 0.72rem;
+  font-style: normal;
+  line-height: 1.25;
 }
 
 .podium-preview span:nth-child(1) {
@@ -279,6 +292,21 @@ button {
     radial-gradient(circle at 32% 32%, rgba(255, 255, 255, 0.3), transparent 4rem),
     linear-gradient(135deg, rgba(60, 130, 255, 0.22), rgba(99, 230, 190, 0.1)),
     rgba(255, 255, 255, 0.04);
+  background-position: center;
+  background-size: cover;
+}
+
+.lobster-preview {
+  height: 172px;
+  background-image:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.36)),
+    url("/review-assets/cielo-rooftop-dining-and-lounge/2024-01-23-e8855069.jpg"),
+    radial-gradient(circle at 32% 32%, rgba(255, 255, 255, 0.3), transparent 4rem),
+    linear-gradient(135deg, rgba(60, 130, 255, 0.22), rgba(99, 230, 190, 0.1));
+}
+
+.cuisine-podium em {
+  font-size: 0.7rem;
 }
 
 .detail-heading {
@@ -448,7 +476,7 @@ button {
   left: 24px;
   bottom: 24px;
   width: min(340px, calc(100vw - 48px));
-  max-height: 42vh;
+  max-height: 68vh;
   padding: 16px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 24px;
@@ -461,7 +489,7 @@ button {
 .controls-panel {
   position: fixed;
   z-index: 4;
-  left: 24px;
+  right: 24px;
   top: 176px;
   width: min(250px, calc(100vw - 48px));
   padding: 14px;
@@ -524,11 +552,41 @@ button {
   font-weight: 800;
 }
 
+.review-search {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 10px;
+}
+
+.review-search span {
+  color: #95a3bd;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.review-search input {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 10px 11px;
+  color: #f7fbff;
+  background: rgba(255, 255, 255, 0.06);
+  font: inherit;
+  outline: none;
+}
+
+.review-search input:focus {
+  border-color: rgba(141, 215, 255, 0.62);
+  box-shadow: 0 0 0 3px rgba(141, 215, 255, 0.08);
+}
+
 .country-list,
 .review-list {
   display: grid;
   gap: 6px;
-  max-height: 30vh;
+  max-height: 48vh;
   overflow: auto;
   padding-right: 4px;
 }
@@ -711,6 +769,25 @@ button {
   color: #95a3bd;
 }
 
+.rating-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rating-line span:first-child {
+  color: #f8d66d;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 16px rgba(248, 214, 109, 0.22);
+}
+
+.rating-line span:last-child {
+  color: #7f8aa3;
+  font-size: 0.72rem;
+  letter-spacing: 0;
+}
+
 .maps-link {
   display: inline-flex;
   margin: 16px 0 0;
@@ -737,12 +814,28 @@ button {
   background: rgba(255, 255, 255, 0.05);
 }
 
+.photo-open {
+  display: block;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.photo-open:hover img {
+  filter: brightness(1.12);
+  transform: scale(1.015);
+}
+
 .photo-card img,
 .photo-placeholder {
   width: 100%;
   height: 220px;
   border-radius: 0;
   object-fit: cover;
+  transition:
+    filter 160ms ease,
+    transform 160ms ease;
 }
 
 .photo-placeholder {
@@ -769,6 +862,62 @@ button {
 .photo-meta span {
   color: #95a3bd;
   font-size: 0.76rem;
+}
+
+.photo-lightbox {
+  position: fixed;
+  z-index: 40;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+}
+
+.photo-lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(10px);
+}
+
+.photo-lightbox figure {
+  position: relative;
+  z-index: 1;
+  width: min(980px, 92vw);
+  max-height: 88vh;
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 24px;
+  overflow: hidden;
+  background: #020403;
+  box-shadow: 0 30px 120px rgba(0, 0, 0, 0.7);
+}
+
+.photo-lightbox img {
+  display: block;
+  width: 100%;
+  max-height: 74vh;
+  object-fit: contain;
+  background: #000;
+}
+
+.photo-lightbox figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 16px;
+  color: #c8d6f0;
+}
+
+.photo-lightbox figcaption strong {
+  color: #f7fbff;
+}
+
+.photo-lightbox figcaption span {
+  color: #95a3bd;
+  white-space: nowrap;
 }
 
 .motivation-panel {

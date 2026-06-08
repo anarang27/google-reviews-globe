@@ -108,29 +108,56 @@ function IntroTab({ dataset, onExplore }: IntroTabProps) {
 
       <section className="showcase-grid" aria-label="Future review highlights">
         <article className="showcase-card podium-card">
-          <p className="eyebrow">Coming soon</p>
+          <p className="eyebrow">Official rankings</p>
           <h3>Favorites Podium</h3>
           <div className="podium-preview" aria-hidden="true">
-            <span>2</span>
-            <span>1</span>
-            <span>3</span>
+            <span>
+              <strong>2</strong>
+              <em>Cielo</em>
+            </span>
+            <span>
+              <strong>1</strong>
+              <em>Teppanyaki Manryu</em>
+            </span>
+            <span>
+              <strong>3</strong>
+              <em>MAD</em>
+            </span>
           </div>
-          <p>Reserved for the restaurants I would personally put on the all-time podium.</p>
+          <p>
+            While these are the "official" rankings, Halab Gate Shawarma will always have a
+            special place in my heart with a rank of #0.
+          </p>
         </article>
 
         <article className="showcase-card photo-favorite-card">
-          <p className="eyebrow">Coming soon</p>
+          <p className="eyebrow">Favorite Pic</p>
           <h3>Favorite Pic</h3>
-          <div className="photo-preview" aria-hidden="true" />
-          <p>A future spotlight for my favorite Google Maps photo and the story behind it.</p>
+          <div className="photo-preview lobster-preview" aria-label="Lobster at Cielo" role="img" />
+          <p>The lobster from Cielo.</p>
         </article>
 
-        <article className="showcase-card">
-          <p className="eyebrow">Coming soon</p>
-          <h3>Review Milestones</h3>
+        <article className="showcase-card cuisine-podium-card">
+          <p className="eyebrow">Official rankings</p>
+          <h3>Favorite Cuisines</h3>
+          <div className="podium-preview cuisine-podium" aria-hidden="true">
+            <span>
+              <strong>2</strong>
+              <em>Mediterranean</em>
+            </span>
+            <span>
+              <strong>1</strong>
+              <em>Spanish</em>
+            </span>
+            <span>
+              <strong>3</strong>
+              <em>Japanese</em>
+            </span>
+          </div>
           <p>
-            Space for milestones like highest-viewed photo, most memorable meal, and favorite
-            country for food.
+            I've always wondered if your home country's cuisine should be your favorite? Indian
+            food will always be close to my heart at a rank of #0 while these are my "official"
+            rankings.
           </p>
         </article>
       </section>
