@@ -102,7 +102,6 @@ export function WireframeEarth() {
     const borders = mesh(
       countriesTopology as never,
       (countriesTopology as unknown as { objects: { countries: never } }).objects.countries,
-      (a, b) => a !== b,
     ) as MultiLineString;
 
     return buildLineGeometry(borders.coordinates, BORDER_RADIUS);
